@@ -17,15 +17,23 @@ public class PlayerMover : MonoBehaviour
     [Header("Movemenet Attributes")]
     [SerializeField] float fltMoveSpeed;
     [SerializeField] InputAction movementInput;
+    [SerializeField] InputAction jumpInput;
+    [SerializeField] [Min(0)] float fltJumpForce = 100f;
 
     //Cashe References
     Rigidbody playerRb;
     Camera mainCam;
+    CapsuleCollider playerCollider;
 
     //Attributes
-
+    bool canJump = false;
 
     void Awake()
+    {
+        InitializeReferences();
+    }
+
+    private void InitializeReferences()
     {
         playerRb = GetComponent<Rigidbody>();
         if (playerRb == null)
@@ -46,20 +54,38 @@ public class PlayerMover : MonoBehaviour
         {
             Debug.Log("Camera found");
         }
+
+        playerCollider = GetComponentInChildren<CapsuleCollider>();
+        if (playerCollider == null)
+        {
+            Debug.Log("No capsule collider found in children");
+        }
+        else
+        {
+            Debug.Log("Capsule collider found in children");
+        }
     }
 
     void OnEnable()
     {
         movementInput.Enable();
+        jumpInput.Enable();
     }
 
     void OnDisable()
     {
         movementInput.Disable();
+        jumpInput.Disable();
     }
 
 
     void Update()
+    {
+        PlayerMoves();
+        PlayerJumps();
+    }
+
+    void PlayerMoves()
     {
         //Read the input values of the movement input
         Vector2 inputDir = movementInput.ReadValue<Vector2>();
@@ -85,7 +111,7 @@ public class PlayerMover : MonoBehaviour
         //       W/S moves up/down of the forward direction.
 
         //Vector direction to move
-        Vector3 moveDir = new Vector3(0,0,0);
+        Vector3 moveDir = new Vector3(0, 0, 0);
 
         if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
         {
@@ -101,5 +127,49 @@ public class PlayerMover : MonoBehaviour
 
         playerRb.velocity = moveDir;
         //Debug.Log(playerRb.velocity);
+    }
+    
+    void PlayerJumps()
+    {
+        if (jumpInput.ReadValue<float>() > Mathf.Epsilon && canJump)
+        {
+            playerRb.AddForce(0,fltJumpForce,0);
+            canJump = false;
+        }
+        //else
+        //{
+        //    Debug.Log("Not jumping, Reason:");
+        //    Debug.Log($"Jump input: {jumpInput.ReadValue<float>() > Mathf.Epsilon}");
+        //    Debug.Log($"Can jump: {canJump}");
+        //}
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        //Check if colliding with ground object
+        switch (other.gameObject.tag)
+        {
+            //Add cases here for jump logic
+            case "Ground":
+                canJump = true;
+                break;
+            default:
+                Debug.Log("Collision detected, not doing anything");
+                break;
+        }
+    }
+    void OnCollisionStay(Collision other)
+    {
+        //Check if colliding with ground object
+        switch (other.gameObject.tag)
+        {
+            //Add cases here for jump logic
+            case "Ground":
+                canJump = true;
+                break;
+            default:
+                Debug.Log("Collision detected, not doing anything");
+                break;
+        }
     }
 }
