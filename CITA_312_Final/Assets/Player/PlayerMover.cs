@@ -63,7 +63,7 @@ public class PlayerMover : MonoBehaviour
     {
         //Read the input values of the movement input
         Vector2 inputDir = movementInput.ReadValue<Vector2>();
-        Debug.Log($"Movement direction: {inputDir}");
+        //Debug.Log($"Movement direction: {inputDir}");
 
         //Direction of movement is relative to the cinemachine's forward direction.
         //Thus, moving the player "forward" is relative to the cinemachine's forward direction
@@ -72,14 +72,14 @@ public class PlayerMover : MonoBehaviour
         Vector2 forwardDir = new Vector2(
             mainCam.transform.forward.x,
             mainCam.transform.forward.z
-            );
+            ).normalized;
         Vector2 rightDir = new Vector2(
             mainCam.transform.right.x,
             mainCam.transform.right.z
-            );
+            ).normalized;
 
-        Debug.Log($"Camera's forward direction = {forwardDir}");
-        Debug.Log($"Camera's right direction = {rightDir}");
+        //Debug.Log($"Camera's forward direction = {forwardDir}");
+        //Debug.Log($"Camera's right direction = {rightDir}");
 
         //Logic: A/D moves left/right of the left direction.
         //       W/S moves up/down of the forward direction.
@@ -100,5 +100,6 @@ public class PlayerMover : MonoBehaviour
         moveDir.y = playerRb.velocity.y;
 
         playerRb.velocity = moveDir;
+        //Debug.Log(playerRb.velocity);
     }
 }
