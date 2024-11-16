@@ -19,6 +19,7 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] InputAction movementInput;
     [SerializeField] InputAction jumpInput;
     [SerializeField] [Min(0)] float fltJumpForce = 100f;
+    [SerializeField] [Min(0)] float maxVelocity = 10f;
 
     //Cashe References
     Rigidbody playerRb;
@@ -27,6 +28,7 @@ public class PlayerMover : MonoBehaviour
 
     //Attributes
     bool canJump = false;
+    bool isGrounded = false;
 
     void Awake()
     {
@@ -87,6 +89,10 @@ public class PlayerMover : MonoBehaviour
 
     void PlayerMoves()
     {
+        if (!isGrounded)
+        {
+            return;
+        }
         //Read the input values of the movement input
         Vector2 inputDir = movementInput.ReadValue<Vector2>();
         //Debug.Log($"Movement direction: {inputDir}");
@@ -123,10 +129,19 @@ public class PlayerMover : MonoBehaviour
             moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltMoveSpeed;
         }
 
-        moveDir.y = playerRb.velocity.y;
+        //moveDir.y = playerRb.velocity.y;
 
-        playerRb.velocity = moveDir;
+        playerRb.AddForce(moveDir);
         //Debug.Log(playerRb.velocity);
+
+        //Clamp the min & max velocity for x and z velocity 
+        playerRb.velocity = new Vector3(
+            Mathf.Clamp(playerRb.velocity.x, -maxVelocity, maxVelocity),
+            playerRb.velocity.y,
+            Mathf.Clamp(playerRb.velocity.z, -maxVelocity, maxVelocity)
+            );
+
+        Debug.Log($"Player velocity: {playerRb.velocity}");
     }
     
     void PlayerJumps()
@@ -152,6 +167,7 @@ public class PlayerMover : MonoBehaviour
             //Add cases here for jump logic
             case "Ground":
                 canJump = true;
+                isGrounded = true;
                 break;
             default:
                 Debug.Log("Collision detected, not doing anything");
@@ -168,7 +184,22 @@ public class PlayerMover : MonoBehaviour
                 canJump = true;
                 break;
             default:
-                Debug.Log("Collision detected, not doing anything");
+                Debug.Log("Collision stayed, not doing anything");
+                break;
+        }
+    }
+
+    void OnCollisionExit(Collision other)
+    {
+        //Check if colliding with ground object
+        switch (other.gameObject.tag)
+        {
+            //Add cases here for jump logic
+            case "Ground":
+                isGrounded = false;
+                break;
+            default:
+                Debug.Log("Exiting collision, not doing anything");
                 break;
         }
     }
