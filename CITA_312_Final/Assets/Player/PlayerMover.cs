@@ -141,7 +141,8 @@ public class PlayerMover : MonoBehaviour
             Mathf.Clamp(playerRb.velocity.z, -maxVelocity, maxVelocity)
             );
 
-        Debug.Log($"Player velocity: {playerRb.velocity}");
+        //Debug.Log($"Player velocity: {playerRb.velocity}");
+        Debug.DrawRay(transform.position, playerRb.velocity);
     }
     
     void PlayerJumps()
@@ -182,6 +183,7 @@ public class PlayerMover : MonoBehaviour
             //Add cases here for jump logic
             case "Ground":
                 canJump = true;
+                isGrounded = true;
                 break;
             default:
                 Debug.Log("Collision stayed, not doing anything");

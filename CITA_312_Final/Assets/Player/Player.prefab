@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c814ad012cd976547bf7868e72251f09, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -249,6 +249,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   fltJumpForce: 250
+  maxVelocity: 10
 --- !u!1 &8668407522574355701
 GameObject:
   m_ObjectHideFlags: 0
