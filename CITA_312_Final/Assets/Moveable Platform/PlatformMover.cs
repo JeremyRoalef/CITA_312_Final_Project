@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /*
  * This script will be attached to the platform prefab.
@@ -13,13 +14,27 @@ using UnityEngine;
 public class PlatformMover : MonoBehaviour
 {
     //Serialized Fields
-    [SerializeField] [Tooltip("The path of platform positions in the world")]
+    [Header("The Path")]
+
+    [SerializeField]
+    [Tooltip("The path of platform positions in the world")]
     GameObject platformPath;
-    [SerializeField][Range(0f,100f)][Tooltip("How fast the platform will move through the path")]
+
+    [Header("Movement Attributes")]
+
+    [SerializeField]
+    [Range(0f,100f)]
+    [Tooltip("How fast the platform will move through the path")]
     float fltPlatformVelocity = 1f;
-    [SerializeField] [Min(0)] [Tooltip("The initial delay of the platform")]
+
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("The initial delay of the platform")]
     float fltInitialMoveDelay = 0f;
-    [SerializeField] [Min(0)] [Tooltip("The delay before moving through next path")]
+
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("The delay before moving through next path")]
     float fltMoveDelay = 0f;
 
     //Cashe References
@@ -27,6 +42,7 @@ public class PlatformMover : MonoBehaviour
 
     //Attributes
     bool isMoving = false;
+    bool isMovingForward = true;
 
     private void Awake()
     {
@@ -40,64 +56,138 @@ public class PlatformMover : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(FollowPath(false));
+        StartCoroutine(FollowPath(true));
     }
 
     void Update()
     {
         if (!isMoving)
         {
-            StartCoroutine(FollowPath(true));
+            isMovingForward = !isMovingForward;
+            StartCoroutine(FollowPath(isMovingForward));
         }
     }
-    IEnumerator FollowPath(bool reverseList)
-    {
-        //If the path is to move backwards, reverse the order of the elements
-        //May want to change where you iterate backwards in the list instead
-        if (reverseList)
-        {
-            path.Reverse();
-        }
 
-        Debug.Log("start of coroutine");
+    //TODO: if and else are the same but iterate in opposite directions. Can easily update this to use one iterator
+    IEnumerator FollowPath(bool moveForward)
+    {
+        //Platform is moving
         isMoving = true;
 
-        //Initial delay
-        yield return new WaitForSeconds(fltInitialMoveDelay);
+        Debug.Log("Start of coroutine");
 
-        //Set starting position
-        transform.position = path[0].transform.position;
-
-
-        foreach (Transform position in path)
+        if (moveForward)
         {
-            Vector3 startPos = transform.position;
-            Vector3 endPos = position.position;
+            //Set position to start
+            transform.position = path[0].position;
 
-            //There's probably bloated variable usage in this that will eat up memory. Should try to find simpler
-            //solution
+            //Initial delay
+            yield return new WaitForSeconds(fltInitialMoveDelay);
 
-            float distance = Vector3.Distance(startPos, endPos);
-
-            //t = d/v 
-            float time = distance / fltPlatformVelocity;
-            float elapsedTime = 0f;
-            float travelPercent = 0f;
-
-            while (travelPercent < 1)
+            for (int i = 1; i < path.Count; i++)
             {
-                transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
-                //Travel % is proportional to elapsed time / total time
-                elapsedTime += Time.deltaTime;
-                travelPercent = elapsedTime / time;
-                yield return new WaitForEndOfFrame();
-            }
+                //Get start & end positions
+                Vector3 startPos = transform.position;
+                Vector3 endPos = path[i].position;
 
-            //Delay between path
-            yield return new WaitForSeconds(fltMoveDelay);
+                //There's probably bloated variable usage in this that will eat up memory. Should try to find simpler
+                //solution
+
+                float distance = Vector3.Distance(startPos, endPos);
+
+                //t = d/v 
+                float time = distance / fltPlatformVelocity;
+                float elapsedTime = 0f;
+                float travelPercent = 0f;
+
+
+                //If first path in list, set the transform and continue to next path object with no delay
+                if (i == 0)
+                {
+                    transform.position = path[i].position;
+                    while (travelPercent < 1)
+                    {
+                        transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
+                        //Travel % is proportional to elapsed time / total time
+                        elapsedTime += Time.deltaTime;
+                        travelPercent = elapsedTime / time;
+                        yield return new WaitForEndOfFrame();
+                    }
+                    continue;
+                }
+
+                //case for when the path is not first
+                while (travelPercent < 1)
+                {
+                    transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
+                    //Travel % is proportional to elapsed time / total time
+                    elapsedTime += Time.deltaTime;
+                    travelPercent = elapsedTime / time;
+                    yield return new WaitForEndOfFrame();
+                }
+
+                //Delay between path
+                yield return new WaitForSeconds(fltMoveDelay);
+            }
+        }
+
+        else
+        {
+            //Set position to start
+            transform.position = path[path.Count - 1].position;
+
+            //Initial delay
+            yield return new WaitForSeconds(fltInitialMoveDelay);
+
+            for (int i = path.Count - 2; i >= 0; i--)
+            {
+                //Get start & end positions
+                Vector3 startPos = transform.position;
+                Vector3 endPos = path[i].position;
+
+                //There's probably bloated variable usage in this that will eat up memory. Should try to find simpler
+                //solution
+
+                float distance = Vector3.Distance(startPos, endPos);
+
+                //t = d/v 
+                float time = distance / fltPlatformVelocity;
+                float elapsedTime = 0f;
+                float travelPercent = 0f;
+
+
+                //If first path in list, set the transform and continue to next path object with no delay
+                if (i == path.Count-1)
+                {
+                    transform.position = path[i].position;
+                    while (travelPercent < 1)
+                    {
+                        transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
+                        //Travel % is proportional to elapsed time / total time
+                        elapsedTime += Time.deltaTime;
+                        travelPercent = elapsedTime / time;
+                        yield return new WaitForEndOfFrame();
+                    }
+                    continue;
+                }
+
+                //case for when the path is not first
+                while (travelPercent < 1)
+                {
+                    transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
+                    //Travel % is proportional to elapsed time / total time
+                    elapsedTime += Time.deltaTime;
+                    travelPercent = elapsedTime / time;
+                    yield return new WaitForEndOfFrame();
+                }
+
+                //Delay between path
+                yield return new WaitForSeconds(fltMoveDelay);
+            }
         }
 
         Debug.Log("End of coroutine");
+        //Platform is no longer moving
         isMoving = false;
     }
 }
