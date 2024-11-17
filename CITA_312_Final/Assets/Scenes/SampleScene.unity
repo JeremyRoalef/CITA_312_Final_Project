@@ -761,6 +761,22 @@ PrefabInstance:
       propertyPath: m_YAxis.Value
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4346502428432490657, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
+      propertyPath: m_XAxis.m_MaxSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4346502428432490657, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
+      propertyPath: m_YAxis.m_MaxSpeed
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4346502428432490657, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
+      propertyPath: m_XAxis.m_SpeedMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4346502428432490657, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
+      propertyPath: m_YAxis.m_SpeedMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5172360224606756891, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_XDamping
       value: 0
@@ -795,15 +811,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5197423609006777746, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.30849403
+      value: 0.30849406
       objectReference: {fileID: 0}
     - target: {fileID: 5197423609006777746, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.000000010147931
       objectReference: {fileID: 0}
     - target: {fileID: 5197423609006777746, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.0000000032910956
       objectReference: {fileID: 0}
     - target: {fileID: 5372048377121106311, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalPosition.y
@@ -819,15 +835,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5372048377121106311, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.35549518
+      value: 0.35549515
       objectReference: {fileID: 0}
     - target: {fileID: 5372048377121106311, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.000000012515316
       objectReference: {fileID: 0}
     - target: {fileID: 5372048377121106311, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.0000000047600714
       objectReference: {fileID: 0}
     - target: {fileID: 5480571600200190194, guid: 21ad0fafb70158f4e86d4db64ca3b141, type: 3}
       propertyPath: m_VerticalDamping
@@ -954,38 +970,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1706451614988400433, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5226957946226443954, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: maxVelocity
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5226957946226443954, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: fltJumpForce
-      value: 250
-      objectReference: {fileID: 0}
-    - target: {fileID: 5226957946226443954, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: fltMoveSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5942368554458751603, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 6445752913723834360, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.1313072
-      objectReference: {fileID: 0}
-    - target: {fileID: 6445752913723834360, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: m_LocalScale.y
-      value: -1.2214707
-      objectReference: {fileID: 0}
-    - target: {fileID: 6445752913723834360, guid: bd59406977764ed45befb361ea284432, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.0306425
-      objectReference: {fileID: 0}
     - target: {fileID: 8130840825463246500, guid: bd59406977764ed45befb361ea284432, type: 3}
       propertyPath: m_Name
       value: Player
