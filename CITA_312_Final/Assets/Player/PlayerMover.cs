@@ -171,7 +171,7 @@ public class PlayerMover : MonoBehaviour
                 isGrounded = true;
                 break;
             default:
-                Debug.Log("Collision detected, not doing anything");
+                //Debug.Log("Collision detected, not doing anything");
                 break;
         }
     }
@@ -186,11 +186,10 @@ public class PlayerMover : MonoBehaviour
                 isGrounded = true;
                 break;
             default:
-                Debug.Log("Collision stayed, not doing anything");
+                //Debug.Log("Collision stayed, not doing anything");
                 break;
         }
     }
-
     void OnCollisionExit(Collision other)
     {
         //Check if colliding with ground object
@@ -201,8 +200,21 @@ public class PlayerMover : MonoBehaviour
                 isGrounded = false;
                 break;
             default:
-                Debug.Log("Exiting collision, not doing anything");
+                //Debug.Log("Exiting collision, not doing anything");
                 break;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Dangerous"))
+        {
+            KillPlayer();
+        }
+    }
+
+    void KillPlayer()
+    {
+        Debug.Log("Time to kill the player :)");
     }
 }

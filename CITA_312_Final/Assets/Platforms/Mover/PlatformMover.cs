@@ -74,7 +74,7 @@ public class PlatformMover : MonoBehaviour
         //Platform is moving
         isMoving = true;
 
-        Debug.Log("Start of coroutine");
+        //Debug.Log("Start of coroutine");
 
         if (moveForward)
         {
@@ -186,7 +186,7 @@ public class PlatformMover : MonoBehaviour
             }
         }
 
-        Debug.Log("End of coroutine");
+        //Debug.Log("End of coroutine");
         //Platform is no longer moving
         isMoving = false;
     }
