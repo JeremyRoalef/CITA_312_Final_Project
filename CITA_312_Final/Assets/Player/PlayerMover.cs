@@ -89,10 +89,11 @@ public class PlayerMover : MonoBehaviour
 
     void PlayerMoves()
     {
-        if (!isGrounded)
-        {
-            return;
-        }
+        //if (!isGrounded)
+        //{
+        //    return;
+        //}
+
         //Read the input values of the movement input
         Vector2 inputDir = movementInput.ReadValue<Vector2>();
         //Debug.Log($"Movement direction: {inputDir}");
