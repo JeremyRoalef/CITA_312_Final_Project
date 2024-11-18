@@ -18,6 +18,9 @@ public class Pusher : MonoBehaviour
     [SerializeField]
     PushBehavior pushBehavior;
 
+    [SerializeField]
+    float fltPlayerLockoutDuration = 1f;
+
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -28,6 +31,8 @@ public class Pusher : MonoBehaviour
 
     private void PushPlayer(Collision other)
     {
+        other.gameObject.GetComponent<PlayerMover>().LockMovement(fltPlayerLockoutDuration);
+
         switch (pushBehavior)
         {
             case PushBehavior.Up:

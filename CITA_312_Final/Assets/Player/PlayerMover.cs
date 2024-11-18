@@ -15,11 +15,26 @@ public class PlayerMover : MonoBehaviour
 {
     //Serialized Fields
     [Header("Movemenet Attributes")]
-    [SerializeField] float fltMoveSpeed;
-    [SerializeField] InputAction movementInput;
-    [SerializeField] InputAction jumpInput;
-    [SerializeField] [Min(0)] float fltJumpForce = 100f;
-    [SerializeField] [Min(0)] float maxVelocity = 10f;
+
+    [SerializeField] 
+    float fltGroundVelocity;
+
+    [SerializeField]
+    float fltAirVelocity;
+
+    [SerializeField] 
+    InputAction movementInput;
+
+    [SerializeField] 
+    InputAction jumpInput;
+    
+    [SerializeField] 
+    [Min(0)] 
+    float fltJumpForce = 100f;
+    
+    [SerializeField] 
+    [Min(0)] 
+    float maxVelocity = 10f;
 
     //Cashe References
     Rigidbody playerRb;
@@ -89,6 +104,12 @@ public class PlayerMover : MonoBehaviour
 
     void PlayerMoves()
     {
+        //Do not run if the movement input is deactivated
+        if (movementInput.enabled == false)
+        {
+            return;
+        }
+
         //if (!isGrounded)
         //{
         //    return;
@@ -120,27 +141,48 @@ public class PlayerMover : MonoBehaviour
         //Vector direction to move
         Vector3 moveDir = new Vector3(0, 0, 0);
 
-        if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
+        if (isGrounded)
         {
-            //Add rightDir to the moveDir
-            moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltMoveSpeed;
+            if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
+            {
+                //Add rightDir to the moveDir
+                moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltGroundVelocity;
+            }
+            if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
+            {
+                moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltGroundVelocity;
+            }
         }
-        if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
+
+        else
         {
-            moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltMoveSpeed;
+            if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
+            {
+                //Add rightDir to the moveDir
+                moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltAirVelocity;
+            }
+            if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
+            {
+                moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltAirVelocity;
+            }
         }
+
 
         //moveDir.y = playerRb.velocity.y;
 
         playerRb.AddForce(moveDir);
         //Debug.Log(playerRb.velocity);
 
-        //Clamp the min & max velocity for x and z velocity 
-        playerRb.velocity = new Vector3(
-            Mathf.Clamp(playerRb.velocity.x, -maxVelocity, maxVelocity),
-            playerRb.velocity.y,
-            Mathf.Clamp(playerRb.velocity.z, -maxVelocity, maxVelocity)
-            );
+        //Clamp the min & max velocity for x and z velocity if on the ground
+
+        if (isGrounded)
+        {
+            playerRb.velocity = new Vector3(
+                Mathf.Clamp(playerRb.velocity.x, -maxVelocity, maxVelocity),
+                playerRb.velocity.y,
+                Mathf.Clamp(playerRb.velocity.z, -maxVelocity, maxVelocity)
+                );
+        }
 
         //Debug.Log($"Player velocity: {playerRb.velocity}");
         Debug.DrawRay(transform.position, playerRb.velocity);
@@ -214,8 +256,19 @@ public class PlayerMover : MonoBehaviour
         }
     }
 
+    public void LockMovement(float lockoutDuration)
+    {
+        movementInput.Disable();
+        Invoke("EnableMovement", lockoutDuration);
+    }
+
     void KillPlayer()
     {
         Debug.Log("Time to kill the player :)");
+    }
+
+    void EnableMovement()
+    {
+        movementInput.Enable();
     }
 }
