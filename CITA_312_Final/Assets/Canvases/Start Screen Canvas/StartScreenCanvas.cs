@@ -17,6 +17,7 @@ public class StartScreenCanvas : MonoBehaviour
     public void OnButtonTutorialClick()
     {
         Debug.Log("Opeining tutorial scene");
+        SceneManager.LoadScene("TutorialScene");
 
     }
 

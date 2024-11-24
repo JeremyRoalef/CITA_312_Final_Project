@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971897e2cf7e8234482aa734b44df1c1, type: 3}
+  m_Name: BigDash
+  m_EditorClassIdentifier: 
+  abilityName: Big Dash
+  description: Dash a further distance than the normal dash. Requires Dash ability.
+    Cannot use with Forward Dash.
+  abilityImage: {fileID: 21300000, guid: 54ae2781d4c5af849b03c50417e87428, type: 3}
+  cost: 1
+  requirements:
+  - {fileID: 11400000, guid: 142b071923e721046a610a55fa4abf95, type: 2}
+  restrictions:
+  - {fileID: 11400000, guid: 26005d039ccd4f7499c546b1956cbc9f, type: 2}
