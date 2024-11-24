@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PauseCanvas : MonoBehaviour
 {
@@ -10,8 +11,6 @@ public class PauseCanvas : MonoBehaviour
     [SerializeField] GameObject pauseCanvas;
 
     public static bool gameIsPaused = false;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +68,24 @@ public class PauseCanvas : MonoBehaviour
 
     public void OnButtonQuitClick()
     {
+        ResumeGame();
+
         //Logic when quitting scene
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "LevelSelect":
+                SceneManager.LoadScene("StartScene");
+                break;
+            default:
+                SceneManager.LoadScene("LevelSelect");
+                break;
+        }
+    }
+
+    public void OnButtonSettingsClick()
+    {
+        SettingsCanvas.instance.SetActive(true);
+        BackTrackCanvasStack.AddCanvasToStack(gameObject);
+        gameObject.SetActive(false);
     }
 }
