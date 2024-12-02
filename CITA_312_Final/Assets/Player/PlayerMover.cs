@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,6 +23,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] 
     InputAction movementInput;
 
+    [Header("Jumping Attributes")]
+
     [SerializeField] 
     InputAction jumpInput;
     
@@ -36,6 +36,10 @@ public class PlayerMover : MonoBehaviour
     [Min(0)] 
     float maxVelocity = 10f;
 
+    [SerializeField]
+    [Min(0)]
+    float fltJumpLockoutDuration = 1f;
+
     //Cashe References
     Rigidbody playerRb;
     Camera mainCam;
@@ -44,6 +48,7 @@ public class PlayerMover : MonoBehaviour
     //Attributes
     bool canJump = false;
     bool isGrounded = false;
+    bool inJumpLockout = false;
 
     void Awake()
     {
@@ -169,7 +174,7 @@ public class PlayerMover : MonoBehaviour
 
 
         //moveDir.y = playerRb.velocity.y;
-
+        
         playerRb.AddForce(moveDir);
         //Debug.Log(playerRb.velocity);
 
@@ -190,10 +195,11 @@ public class PlayerMover : MonoBehaviour
     
     void PlayerJumps()
     {
-        if (jumpInput.ReadValue<float>() > Mathf.Epsilon && canJump)
+        if (jumpInput.ReadValue<float>() > Mathf.Epsilon && CheckIfPlayerCanJump())
         {
             playerRb.AddForce(0,fltJumpForce,0);
             canJump = false;
+            LockJump();
         }
         //else
         //{
@@ -205,6 +211,8 @@ public class PlayerMover : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
+        //Debug.Log("Collision with " + other.gameObject.name + " Tagged " + other.gameObject.tag);
+
         //Check if colliding with ground object
         switch (other.gameObject.tag)
         {
@@ -270,5 +278,23 @@ public class PlayerMover : MonoBehaviour
     void EnableMovement()
     {
         movementInput.Enable();
+    }
+
+    bool CheckIfPlayerCanJump()
+    {
+        //Return the conditions for player jumping.
+        //If player can jump and they are not locked out of jumping, this'll return true
+        return isGrounded && canJump && !inJumpLockout;
+    }
+
+    void LockJump()
+    {
+        inJumpLockout = true;
+        Invoke("UnlockJump", fltJumpLockoutDuration);
+    }
+
+    void UnlockJump()
+    {
+        inJumpLockout = false;
     }
 }

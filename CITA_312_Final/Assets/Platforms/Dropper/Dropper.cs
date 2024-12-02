@@ -12,34 +12,19 @@ public class Dropper : MonoBehaviour
     [SerializeField]
     [Min(0)]
     float fltDestroyDelay = 1f;
-    bool collidedWithPlayer = false;
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (collidedWithPlayer)
-        {
-            return;
-        }
-
-        //IM TRIGGERED (Let me speak to your manager)
-        collidedWithPlayer = true;
-
-        if (other.gameObject.CompareTag("Player"))
-        {
-            InitiateDropSequence();
-        }
-    }
-
-    void InitiateDropSequence()
+    public void InitiateDropSequence()
     {
         Invoke("EnableGravity", fltGravityActivationDelay);
         Invoke("DestroyDropper", fltDestroyDelay);
     }
 
+    //Used in drop sequence
     void EnableGravity()
     {
         transform.AddComponent<Rigidbody>();
     }
+    //Used in drop sequence
     void DestroyDropper()
     {
         Destroy(gameObject);

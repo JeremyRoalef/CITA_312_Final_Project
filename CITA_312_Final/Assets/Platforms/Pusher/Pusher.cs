@@ -47,7 +47,5 @@ public class Pusher : MonoBehaviour
                 other.rigidbody.AddForce(forceDir * fltForceAmount);
                 break;
         }
-
-
     }
 }
