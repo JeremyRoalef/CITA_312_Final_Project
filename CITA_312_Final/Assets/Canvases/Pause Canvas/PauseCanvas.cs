@@ -70,16 +70,10 @@ public class PauseCanvas : MonoBehaviour
     {
         ResumeGame();
 
-        //Logic when quitting scene
-        switch (SceneManager.GetActiveScene().name)
-        {
-            case "LevelSelect":
-                SceneManager.LoadScene("StartScene");
-                break;
-            default:
-                SceneManager.LoadScene("LevelSelect");
-                break;
-        }
+        //Change music to default music
+        MusicManager.instance.GetComponent<MusicManager>().Music = MusicManager.MusicType.defaultMusic; //This line is getting out of hand
+        
+        SceneManager.LoadScene("LevelSelect");
     }
 
     public void OnButtonSettingsClick()

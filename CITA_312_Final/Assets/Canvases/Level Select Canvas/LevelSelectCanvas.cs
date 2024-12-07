@@ -57,6 +57,27 @@ public class LevelSelectCanvas : MonoBehaviour
     {
         LoadLevel(intLevelIndex);
         DisplayLevelAbilities();
+        ChangeMusicClip();
+    }
+
+    private void ChangeMusicClip()
+    {
+        switch (intLevelIndex)
+        {
+            //level 1
+            case 0:
+                //What a line of code
+                MusicManager.instance.GetComponent<MusicManager>().Music = MusicManager.MusicType.level1Music;
+                break;
+            //Level 2
+            case 1:
+                MusicManager.instance.GetComponent<MusicManager>().Music = MusicManager.MusicType.level2Music;
+                break;
+            //Level music not added
+            default:
+                MusicManager.instance.GetComponent<MusicManager>().Music = MusicManager.MusicType.defaultMusic;
+                break;
+        }
     }
 
     void DisplayLevel(int levelIndex)
@@ -74,4 +95,10 @@ public class LevelSelectCanvas : MonoBehaviour
         //I found a way to consistently load scenes by their name, even if the name changes!
         SceneManager.LoadScene(levelScenes[levelIndex].name);
     }
+    public void OnButtonBackClick()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
 }
+
+
