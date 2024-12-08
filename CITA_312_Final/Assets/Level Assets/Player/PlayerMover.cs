@@ -43,7 +43,8 @@ public class PlayerMover : MonoBehaviour
     //Cashe References
     Rigidbody playerRb;
     Camera mainCam;
-    CapsuleCollider playerCollider;
+    //CapsuleCollider playerCollider;
+    AudioSource audioSource;
 
     //Attributes
     bool canJump = false;
@@ -77,15 +78,24 @@ public class PlayerMover : MonoBehaviour
             Debug.Log("Camera found");
         }
 
-        playerCollider = GetComponentInChildren<CapsuleCollider>();
-        if (playerCollider == null)
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
         {
-            Debug.Log("No capsule collider found in children");
+            Debug.Log("No Audio Source Found");
         }
         else
         {
-            Debug.Log("Capsule collider found in children");
+            Debug.Log("Audio Source Found");
         }
+        //playerCollider = GetComponentInChildren<CapsuleCollider>();
+        //if (playerCollider == null)
+        //{
+        //    Debug.Log("No capsule collider found in children");
+        //}
+        //else
+        //{
+        //    Debug.Log("Capsule collider found in children");
+        //}
     }
 
     void OnEnable()
@@ -200,6 +210,7 @@ public class PlayerMover : MonoBehaviour
             playerRb.AddForce(0,fltJumpForce,0);
             canJump = false;
             LockJump();
+            PlayJumpSound();
         }
         //else
         //{
@@ -296,5 +307,11 @@ public class PlayerMover : MonoBehaviour
     void UnlockJump()
     {
         inJumpLockout = false;
+    }
+
+    void PlayJumpSound()
+    {
+        audioSource.Stop();
+        audioSource.Play();
     }
 }

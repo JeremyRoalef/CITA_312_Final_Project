@@ -21,14 +21,24 @@ public class Pusher : MonoBehaviour
     [SerializeField]
     float fltPlayerLockoutDuration = 1f;
 
+    AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.Log($"No Audio Source Found In {gameObject.name}");
+        }
+    }
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             PushPlayer(other);
+            PlayPushSound();
         }
     }
-
     private void PushPlayer(Collision other)
     {
         other.gameObject.GetComponent<PlayerMover>().LockMovement(fltPlayerLockoutDuration);
@@ -47,5 +57,10 @@ public class Pusher : MonoBehaviour
                 other.rigidbody.AddForce(forceDir * fltForceAmount);
                 break;
         }
+    }
+    void PlayPushSound()
+    {
+        audioSource.Stop();
+        audioSource.Play();
     }
 }
