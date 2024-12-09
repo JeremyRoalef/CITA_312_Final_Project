@@ -159,6 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fltGravityActivationDelay: 0.5
   fltDestroyDelay: 1
+  dropColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!1 &3400495356925956287
 GameObject:
   m_ObjectHideFlags: 0

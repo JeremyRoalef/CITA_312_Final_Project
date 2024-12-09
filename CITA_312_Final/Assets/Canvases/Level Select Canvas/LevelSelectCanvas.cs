@@ -16,7 +16,7 @@ public class LevelSelectCanvas : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Drag the level abilities in ascending order here. (level 1 goes with top level abilities and so on)")]
-    LevelAbilitiesSO[] levelAbilities;
+    LevelSO[] levelAbilities;
 
     [SerializeField]
     [Tooltip("This text field is for the button in the middle of the canvas")]
@@ -64,7 +64,7 @@ public class LevelSelectCanvas : MonoBehaviour
     {
         switch (intLevelIndex)
         {
-            //level 1
+            //levelSO 1
             case 0:
                 //What a line of code
                 MusicManager.instance.GetComponent<MusicManager>().Music = MusicManager.MusicType.level1Music;

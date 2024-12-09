@@ -17,3 +17,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba1481c0889d4b346b437aaada4e4dfc, type: 2}
   - {fileID: 11400000, guid: a9fd0dfc032cc374eb9fe2d695fdf76f, type: 2}
   - {fileID: 11400000, guid: 4a6e2dec215be274984ff3843e7a408d, type: 2}
+  levelScene: {fileID: 102900000, guid: ec6a80532992a364db10f25098f8cd48, type: 3}
+  minScore: 500
+  maxScore: 1000
+  quickestTimeToCompleteLevel: 40
+  slowestTimeToCompleteLevel: 60

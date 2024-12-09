@@ -9,7 +9,7 @@ public class StartScreenCanvas : MonoBehaviour
     public void OnButtonStartClick()
     {
         Debug.Log("Starting the game");
-        //Load the level select scene
+        //Load the levelSO select scene
         SceneManager.LoadScene("LevelSelect");
     }
 

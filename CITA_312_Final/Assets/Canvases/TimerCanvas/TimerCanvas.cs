@@ -4,10 +4,10 @@ using TMPro;
 using UnityEngine;
 
 /*
- * This script will hold the time the player spends in a level. This script will also talk to the timer canvas
- * to display the time the player has been in the level.
+ * This script will hold the time the player spends in a levelSO. This script will also talk to the timer canvas
+ * to display the time the player has been in the levelSO.
  */
-public class Timer : MonoBehaviour
+public class TimerCanvas : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("The timer text in the scene")]
