@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 /*
@@ -15,7 +14,7 @@ public class LevelSO : ScriptableObject
     public PlayerAbilitySO[] abilities;
 
     [Tooltip("Drag the level's scene here")]
-    public SceneAsset levelScene;
+    public string levelScene = "Enter the Level Name Here";
 
     [Range(0f, 1000f)]
     [Tooltip("Enter the minimum score here")]
