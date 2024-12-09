@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +11,7 @@ public class LevelSelectCanvas : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Drag the levels in ascending order here")]
-    SceneAsset[] levelScenes;
+    LevelSO[] levels;
 
     [SerializeField]
     [Tooltip("Drag the level abilities in ascending order here. (level 1 goes with top level abilities and so on)")]
@@ -29,7 +28,7 @@ public class LevelSelectCanvas : MonoBehaviour
 
     public void OnButtonNextLevelClick()
     {
-        if (intLevelIndex < levelScenes.Length - 1)
+        if (intLevelIndex < levels.Length - 1)
         {
             Debug.Log("Showing next level...");
             intLevelIndex++;
@@ -58,6 +57,7 @@ public class LevelSelectCanvas : MonoBehaviour
         LoadLevel(intLevelIndex);
         DisplayLevelAbilities();
         ChangeMusicClip();
+        CursorLockState.LockCursor();
     }
 
     private void ChangeMusicClip()
@@ -93,7 +93,7 @@ public class LevelSelectCanvas : MonoBehaviour
     void LoadLevel(int levelIndex)
     {
         //I found a way to consistently load scenes by their name, even if the name changes!
-        SceneManager.LoadScene(levelScenes[levelIndex].name);
+        SceneManager.LoadScene(levels[levelIndex].levelScene);
     }
     public void OnButtonBackClick()
     {

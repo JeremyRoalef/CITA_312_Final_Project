@@ -25,6 +25,7 @@ public class Scoreboard : MonoBehaviour
     {
         //Get the timer canvas in scene
         CalculateAndDisplayScore();
+        CursorLockState.UnlockCursor();
     }
 
     public void OnButtonReturnToLevelSelectClick()

@@ -20,8 +20,4 @@ public class ButtonPressSFX : MonoBehaviour
     {
         audioSource.Play();
     }
-    public void StopButtonPressSFX()
-    {
-        audioSource.Stop();
-    }
 }

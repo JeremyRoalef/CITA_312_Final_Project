@@ -36,6 +36,7 @@ public class PauseCanvas : MonoBehaviour
             if (gameIsPaused)
             {
                 ResumeGame();
+                CursorLockState.LockCursor();
             }
             else
             {
@@ -48,7 +49,7 @@ public class PauseCanvas : MonoBehaviour
     {
         pauseCanvas.SetActive(false);
         Time.timeScale = 1.0f;
-        gameIsPaused = false;   
+        gameIsPaused = false;
     }
 
     void PauseGame()
@@ -59,11 +60,13 @@ public class PauseCanvas : MonoBehaviour
         //means that time does not move
         Time.timeScale = 0;
         gameIsPaused = true;
+        CursorLockState.UnlockCursor();
     }
 
     public void OnButtonResumeClick()
     {
         ResumeGame();
+        CursorLockState.LockCursor();
     }
 
     public void OnButtonQuitClick()
