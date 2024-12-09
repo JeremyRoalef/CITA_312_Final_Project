@@ -4,17 +4,23 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Scoreboard : MonoBehaviour
+/*
+ * This script is attached to the scoreboard canvas. This script will be responsible for displaying the player's score at the
+ * end of the level and returning to the level select scene.
+ */
+public class ScoreboardCanvas : MonoBehaviour
 {
+    //Serialized fields
     [SerializeField]
     [Tooltip("Drag the level scriptable object into this field")]
     LevelSO levelSO;
 
-    TimerCanvas timerCanvas;
-
     [SerializeField]
     [Tooltip("Enter the score text game object here")]
     TextMeshProUGUI scoreText;
+
+    //Cashe References
+    TimerCanvas timerCanvas;
 
     private void Awake()
     {
@@ -25,6 +31,8 @@ public class Scoreboard : MonoBehaviour
     {
         //Get the timer canvas in scene
         CalculateAndDisplayScore();
+
+        //Allow the player to move their cursor
         CursorLockState.UnlockCursor();
     }
 

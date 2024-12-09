@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is attacehd to the controls canvas.
+ * 
+ * This script will be responsible for changing the player's controls
+ */
 public class ControlsCanvas : MonoBehaviour
 {
     //Singleton canvas
@@ -24,7 +29,6 @@ public class ControlsCanvas : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Method for back button
     public void OnButtonBackClick()
     {
         BackTrackCanvasStack.ReturnToPreviousCanvas(gameObject);

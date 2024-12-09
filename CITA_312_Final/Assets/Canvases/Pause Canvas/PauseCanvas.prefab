@@ -1138,7 +1138,7 @@ MonoBehaviour:
       m_Action: Pause
       m_Flags: 0
     m_Flags: 0
-  pauseCanvas: {fileID: 8683788357185109591}
+  panelCanvas: {fileID: 8683788357185109591}
 --- !u!114 &4755531535725288253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1151,6 +1151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8839111c640134c873a45e9b931668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSFX: {fileID: 0}
 --- !u!82 &7769665602890911918
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1161,7 +1162,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c39733d2eb45249e5ab9260bf481573d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 290d9b14f2b291e428b23efc8fdffa64, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.488
   m_Pitch: 1.2

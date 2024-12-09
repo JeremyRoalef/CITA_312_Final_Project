@@ -4,26 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * This script is attached to the win location prefab.
+ * 
+ * This script is responsible for the behavior involving the player reaching the end of the level.
+ */
+
+//This script requires an audio source
+[RequireComponent(typeof(AudioSource))]
 public class WinLocation : MonoBehaviour
 {
-    AudioSource audioSource;
-
-    bool playerHasWon = false;
-
+    //Serialized fields
     [SerializeField]
     [Tooltip("Drag the scoreboard canvas here")]
     GameObject scoreboard;
 
-    private void Awake()
+    //Cashe references
+    AudioSource audioSource;
+
+    //Attributes
+    bool playerHasWon = false;
+
+    void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            Debug.Log($"No audio source in {gameObject.name}");
-        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player") && !playerHasWon)
         {
@@ -39,12 +46,12 @@ public class WinLocation : MonoBehaviour
         DisplayScoreboard();
     }
 
-    private void DisplayScoreboard()
+    void DisplayScoreboard()
     {
         scoreboard.SetActive(true);
     }
 
-    private void PlayWinSound()
+    void PlayWinSound()
     {
         audioSource.Play();
     }

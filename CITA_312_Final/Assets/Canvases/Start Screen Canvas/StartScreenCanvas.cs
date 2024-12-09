@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * This script is attached to the start screen canvas in the starting scene.
+ * 
+ * This script will be responsible for handling button pressing.
+ */
 public class StartScreenCanvas : MonoBehaviour
 {
-    //Method for start button
     public void OnButtonStartClick()
     {
         Debug.Log("Starting the game");
@@ -13,7 +17,6 @@ public class StartScreenCanvas : MonoBehaviour
         SceneManager.LoadScene("LevelSelect");
     }
 
-    //Method for tutorial button
     public void OnButtonTutorialClick()
     {
         Debug.Log("Opeining tutorial scene");
@@ -21,7 +24,6 @@ public class StartScreenCanvas : MonoBehaviour
 
     }
 
-    //Method for settings button
     public void OnButtonSettingsClick()
     {
         //Open settings canvas, hide current canvas, add current canvas to the backtrack stack
@@ -30,7 +32,6 @@ public class StartScreenCanvas : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Method for quit button
     public void OnButtonQuitClick()
     {
         Debug.Log("Quitting the application");

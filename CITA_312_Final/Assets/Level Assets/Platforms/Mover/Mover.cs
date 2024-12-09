@@ -5,10 +5,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /*
- * This script will be attached to the platform prefab.
+ * This script is attached to the platform prefab.
  * 
- * This script will be responsible for accepting a bunch of positions the platform will move to and form using linear
- * interpolation 
+ * This script is responsible for accepting positions the platform will move to and form using linear interpolation 
  */
 
 public class Mover : MonoBehaviour
@@ -48,7 +47,8 @@ public class Mover : MonoBehaviour
     {
         if (platformPath == null)
         {
-            Debug.Log($"No Path given to object {gameObject.name}");
+            Debug.Log($"No Path given to object {gameObject.name}. Removing script...");
+            Destroy(this);
         }
 
         path = new List<Transform>();
@@ -62,19 +62,19 @@ public class Mover : MonoBehaviour
     }
     void Start()
     {
+        //Start by moving forward.
         StartCoroutine(FollowPath(true));
     }
 
     void Update()
     {
-        if (!isMoving)
-        {
-            isMovingForward = !isMovingForward;
-            StartCoroutine(FollowPath(isMovingForward));
-        }
+        if (isMoving) {return;}
+        isMovingForward = !isMovingForward;
+        StartCoroutine(FollowPath(isMovingForward));
     }
 
     //TODO: if and else are the same but iterate in opposite directions. Can easily update this to use one iterator
+    // (Well that never happened...)
     IEnumerator FollowPath(bool moveForward)
     {
         //Platform is moving

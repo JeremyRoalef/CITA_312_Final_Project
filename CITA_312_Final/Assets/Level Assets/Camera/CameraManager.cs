@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
+/*
+ * This script is attached to the main camera in the camera prefab
+ * 
+ * This script is responsible for controlling camera behavior.
+ */
 public class CameraManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Update()
     {
-        //Do not ignore time scale
-        GetComponent<CinemachineBrain>().m_IgnoreTimeScale = false;
-    }
-
-    private void Update()
-    {
+        //This stops the camera from spinning while the game is paused
         if (PauseCanvas.gameIsPaused)
         {
             GetComponent<CinemachineBrain>().enabled = false;

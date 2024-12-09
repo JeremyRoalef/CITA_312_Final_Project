@@ -32,7 +32,7 @@ public class LevelSO : ScriptableObject
     [Min(0)]
     public float slowestTimeToCompleteLevel;
 
-    private void OnValidate()
+    void OnValidate()
     {
         //check min & max score
         if (minScore > maxScore)

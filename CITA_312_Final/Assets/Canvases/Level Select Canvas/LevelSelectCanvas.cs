@@ -4,11 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * This script is attached to the level select canvas and is responsible for selecting and starting levels.
+ */
 public class LevelSelectCanvas : MonoBehaviour
 {
-    //Integer will store the index of the levels. Level 1 is index 0 and so on
-    int intLevelIndex = 0;
-
+    //Serialized fields
     [SerializeField]
     [Tooltip("Drag the levels in ascending order here")]
     LevelSO[] levels;
@@ -21,6 +22,9 @@ public class LevelSelectCanvas : MonoBehaviour
     [Tooltip("This text field is for the button in the middle of the canvas")]
     TextMeshProUGUI levelNameText;
 
+    //Attributes
+    int intLevelIndex = 0; //Integer will store the index of the levels. Level 1 is index 0 and so on
+
     private void Start()
     {
         DisplayLevel(intLevelIndex);
@@ -30,32 +34,24 @@ public class LevelSelectCanvas : MonoBehaviour
     {
         if (intLevelIndex < levels.Length - 1)
         {
-            Debug.Log("Showing next level...");
+            //Debug.Log("Showing next level...");
             intLevelIndex++;
             DisplayLevel(intLevelIndex);
-        }
-        else
-        {
-            Debug.Log("Already at highest level");
         }
     }
     public void OnButtonPreviousLevelClick()
     {
         if (intLevelIndex > 0)
         {
-            Debug.Log("Showing previous level");
+            //Debug.Log("Showing previous level");
             intLevelIndex--;
             DisplayLevel(intLevelIndex);
-        }
-        else
-        {
-            Debug.Log("Already at lowest level");
         }
     }
     public void OnButtonLevelSelectClick()
     {
         LoadLevel(intLevelIndex);
-        DisplayLevelAbilities();
+        //DisplayLevelAbilities();
         ChangeMusicClip();
         CursorLockState.LockCursor();
     }
@@ -64,7 +60,7 @@ public class LevelSelectCanvas : MonoBehaviour
     {
         switch (intLevelIndex)
         {
-            //levelSO 1
+            //Level 1
             case 0:
                 //What a line of code
                 MusicManager.instance.GetComponent<MusicManager>().Music = MusicManager.MusicType.level1Music;
@@ -92,7 +88,6 @@ public class LevelSelectCanvas : MonoBehaviour
 
     void LoadLevel(int levelIndex)
     {
-        //I found a way to consistently load scenes by their name, even if the name changes!
         SceneManager.LoadScene(levels[levelIndex].levelScene);
     }
     public void OnButtonBackClick()

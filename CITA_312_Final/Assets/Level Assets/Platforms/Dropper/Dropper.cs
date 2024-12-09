@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/*
+ * This script is attached to the dropper prefab.
+ * 
+ * This script is responsible for dropper behavior.
+ */
 public class Dropper : MonoBehaviour
 {
+    //Serialized fields
     [SerializeField]
     [Min(0)]
     float fltGravityActivationDelay = 0.2f;
@@ -17,6 +23,7 @@ public class Dropper : MonoBehaviour
     [Tooltip("The color the dropper will change to when it's getting ready to fall")]
     Color dropColor;
 
+    //Called by the crusher event handler script
     public void InitiateDropSequence()
     {   
         StartCoroutine(ChangeDropperColor());

@@ -4,24 +4,28 @@ using UnityEngine.InputSystem;
 /*
  * This script is attached to the player prefab.
  * 
- * This script will be responsible for moving the player based on the perspective the camera that is
- * looking at the player. This script will also be responsible for other mechanics involving player movement
- * like jumping, running, sprinting, etc.
+ * This script is responsible for moving the player relative to the camera that is looking at the player. This script
+ * will also be responsible for other mechanics involving player movemnt like jumping, running, sprinting, etc.
  */
 
+//Script requires rigigbody and audio source components
+[RequireComponent(typeof(Rigidbody), typeof(AudioSource))]
 public class PlayerMover : MonoBehaviour
 {
     //Serialized Fields
     [Header("Movemenet Attributes")]
 
-    [SerializeField] 
+    [SerializeField]
+    [Tooltip("The speed the player will move at when grounded")]
     float fltGroundVelocity;
 
     [SerializeField]
+    [Tooltip("The speed the player will move at when not grounded")]
     float fltAirVelocity;
 
     [SerializeField] 
     InputAction movementInput;
+
 
     [Header("Jumping Attributes")]
 
@@ -29,21 +33,23 @@ public class PlayerMover : MonoBehaviour
     InputAction jumpInput;
     
     [SerializeField] 
-    [Min(0)] 
+    [Min(0)]
+    [Tooltip("The strength of the player's jump")]
     float fltJumpForce = 100f;
     
     [SerializeField] 
-    [Min(0)] 
+    [Min(0)]
+    [Tooltip("The maximum ground speed the player can move at")]
     float maxVelocity = 10f;
 
     [SerializeField]
     [Min(0)]
+    [Tooltip("The minimum delay between two jump inputs")]
     float fltJumpLockoutDuration = 1f;
 
     //Cashe References
     Rigidbody playerRb;
     Camera mainCam;
-    //CapsuleCollider playerCollider;
     AudioSource audioSource;
 
     //Attributes
@@ -51,175 +57,31 @@ public class PlayerMover : MonoBehaviour
     bool isGrounded = false;
     bool inJumpLockout = false;
 
+    //Event Systems
     void Awake()
     {
         InitializeReferences();
     }
 
-    private void InitializeReferences()
-    {
-        playerRb = GetComponent<Rigidbody>();
-        if (playerRb == null)
-        {
-            Debug.Log("No Rigidbody found");
-        }
-        else
-        {
-            Debug.Log("Player Rigidbody found");
-        }
-
-        mainCam = FindObjectOfType<Camera>();
-        if (mainCam == null)
-        {
-            Debug.Log("No camera found");
-        }
-        else
-        {
-            Debug.Log("Camera found");
-        }
-
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            Debug.Log("No Audio Source Found");
-        }
-        else
-        {
-            Debug.Log("Audio Source Found");
-        }
-        //playerCollider = GetComponentInChildren<CapsuleCollider>();
-        //if (playerCollider == null)
-        //{
-        //    Debug.Log("No capsule collider found in children");
-        //}
-        //else
-        //{
-        //    Debug.Log("Capsule collider found in children");
-        //}
-    }
-
     void OnEnable()
     {
+        //Enable input bindings
         movementInput.Enable();
         jumpInput.Enable();
     }
 
     void OnDisable()
     {
+        //Disable input bindings
         movementInput.Disable();
         jumpInput.Disable();
     }
-
 
     void Update()
     {
         PlayerMoves();
         PlayerJumps();
     }
-
-    void PlayerMoves()
-    {
-        //Do not run if the movement input is deactivated
-        if (movementInput.enabled == false)
-        {
-            return;
-        }
-
-        //if (!isGrounded)
-        //{
-        //    return;
-        //}
-
-        //Read the input values of the movement input
-        Vector2 inputDir = movementInput.ReadValue<Vector2>();
-        //Debug.Log($"Movement direction: {inputDir}");
-
-        //Direction of movement is relative to the cinemachine's forward direction.
-        //Thus, moving the player "forward" is relative to the cinemachine's forward direction
-
-        //Get the main camera's forwards vector
-        Vector2 forwardDir = new Vector2(
-            mainCam.transform.forward.x,
-            mainCam.transform.forward.z
-            ).normalized;
-        Vector2 rightDir = new Vector2(
-            mainCam.transform.right.x,
-            mainCam.transform.right.z
-            ).normalized;
-
-        //Debug.Log($"Camera's forward direction = {forwardDir}");
-        //Debug.Log($"Camera's right direction = {rightDir}");
-
-        //Logic: A/D moves left/right of the left direction.
-        //       W/S moves up/down of the forward direction.
-
-        //Vector direction to move
-        Vector3 moveDir = new Vector3(0, 0, 0);
-
-        if (isGrounded)
-        {
-            if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
-            {
-                //Add rightDir to the moveDir
-                moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltGroundVelocity;
-            }
-            if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
-            {
-                moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltGroundVelocity;
-            }
-        }
-
-        else
-        {
-            if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
-            {
-                //Add rightDir to the moveDir
-                moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltAirVelocity;
-            }
-            if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
-            {
-                moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltAirVelocity;
-            }
-        }
-
-
-        //moveDir.y = playerRb.velocity.y;
-        
-        playerRb.AddForce(moveDir);
-        //Debug.Log(playerRb.velocity);
-
-        //Clamp the min & max velocity for x and z velocity if on the ground
-
-        if (isGrounded)
-        {
-            playerRb.velocity = new Vector3(
-                Mathf.Clamp(playerRb.velocity.x, -maxVelocity, maxVelocity),
-                playerRb.velocity.y,
-                Mathf.Clamp(playerRb.velocity.z, -maxVelocity, maxVelocity)
-                );
-        }
-
-        //Debug.Log($"Player velocity: {playerRb.velocity}");
-        Debug.DrawRay(transform.position, playerRb.velocity);
-    }
-    
-    void PlayerJumps()
-    {
-        if (jumpInput.ReadValue<float>() > Mathf.Epsilon && CheckIfPlayerCanJump())
-        {
-            playerRb.AddForce(0,fltJumpForce,0);
-            canJump = false;
-            LockJump();
-            PlayJumpSound();
-        }
-        //else
-        //{
-        //    Debug.Log("Not jumping, Reason:");
-        //    Debug.Log($"Jump input: {jumpInput.ReadValue<float>() > Mathf.Epsilon}");
-        //    Debug.Log($"Can jump: {canJump}");
-        //}
-    }
-
     void OnCollisionEnter(Collision other)
     {
         //Debug.Log("Collision with " + other.gameObject.name + " Tagged " + other.gameObject.tag);
@@ -237,8 +99,11 @@ public class PlayerMover : MonoBehaviour
                 break;
         }
     }
+
     void OnCollisionStay(Collision other)
     {
+        //Debug.Log("Collision with " + other.gameObject.name + " Tagged " + other.gameObject.tag);
+
         //Check if colliding with ground object
         switch (other.gameObject.tag)
         {
@@ -252,8 +117,11 @@ public class PlayerMover : MonoBehaviour
                 break;
         }
     }
+
     void OnCollisionExit(Collision other)
     {
+        //Debug.Log("Collision with " + other.gameObject.name + " Tagged " + other.gameObject.tag);
+
         //Check if colliding with ground object
         switch (other.gameObject.tag)
         {
@@ -267,7 +135,7 @@ public class PlayerMover : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Dangerous"))
         {
@@ -275,17 +143,140 @@ public class PlayerMover : MonoBehaviour
         }
     }
 
+
+    //Public Methods
     public void LockMovement(float lockoutDuration)
     {
         movementInput.Disable();
         Invoke("EnableMovement", lockoutDuration);
     }
 
-    void KillPlayer()
+
+    //Private Mehtods
+    void InitializeReferences()
     {
-        Debug.Log("Time to kill the player :)");
+        playerRb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+
+        mainCam = FindObjectOfType<Camera>();
+        if (mainCam == null)
+        {
+            Debug.Log("No camera found");
+        }
+        else
+        {
+            Debug.Log("Camera found");
+        }
     }
 
+    void PlayerMoves()
+    {
+        /*
+         * Logic:
+         * 
+         * 1)
+         * Do not run if the movement input is deactivated
+         * 
+         * 2)
+         * Get the main camera's forward and right vector & normalize them to remove magnitude
+         * 
+         * 3)
+         * Direction of movement is relative to the cinemachine's looking direction.
+         * Thus, moving the player "forward" is relative to the cinemachine's forward direction
+         * and moving the player "rightward" is relative to the cinemachine's rightward direction
+         * Additionally, player moves quicker and slower based on whether they are grounded or not.
+         * 
+         * 4)
+         * Clamp the min & max velocity for x and z velocity if on the ground
+         */
+
+
+        //1)
+        if (movementInput.enabled == false) {return;}
+
+        //Read the input values of the movement input
+        Vector2 inputDir = movementInput.ReadValue<Vector2>();
+
+        //2)
+        Vector2 forwardDir = new Vector2(
+            mainCam.transform.forward.x,
+            mainCam.transform.forward.z
+            ).normalized;
+        Vector2 rightDir = new Vector2(
+            mainCam.transform.right.x,
+            mainCam.transform.right.z
+            ).normalized;
+
+        //Direction to move
+        Vector3 moveDir = new Vector3(0, 0, 0);
+
+        //3)
+        if (isGrounded)
+        {
+            if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
+            {
+                //Add rightDir to the moveDir
+                moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltGroundVelocity;
+            }
+            if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
+            {
+                //Add forwardDir to the moveDir
+                moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltGroundVelocity;
+            }
+        }
+        else
+        {
+            if (Mathf.Abs(inputDir.x) > Mathf.Epsilon)
+            {
+                //Add rightDir to the moveDir
+                moveDir += new Vector3(rightDir.x * inputDir.x, 0, rightDir.y * inputDir.x) * fltAirVelocity;
+            }
+            if (Mathf.Abs(inputDir.y) > Mathf.Epsilon)
+            {
+                moveDir += new Vector3(forwardDir.x * inputDir.y, 0, forwardDir.y * inputDir.y) * fltAirVelocity;
+            }
+        }
+        
+        //Apply force to the player
+        playerRb.AddForce(moveDir);
+
+        //4)
+        if (isGrounded)
+        {
+            playerRb.velocity = new Vector3(
+                Mathf.Clamp(playerRb.velocity.x, -maxVelocity, maxVelocity),
+                playerRb.velocity.y,
+                Mathf.Clamp(playerRb.velocity.z, -maxVelocity, maxVelocity)
+                );
+        }
+
+        //Debug movement
+
+        //Debug.Log($"Player velocity: {playerRb.velocity}");
+        //Debug.Log($"Movement direction: {inputDir}");
+        //Debug.Log($"Camera's forward direction = {forwardDir}");
+        //Debug.Log($"Camera's right direction = {rightDir}");
+        //Debug.Log($"Player velocity: {playerRb.velocity}");
+        //Debug.DrawRay(transform.position, playerRb.velocity);
+    }
+
+    void PlayerJumps()
+    {
+        if (jumpInput.ReadValue<float>() > Mathf.Epsilon && CheckIfPlayerCanJump())
+        {
+            playerRb.AddForce(0,fltJumpForce,0);
+            canJump = false;
+            LockJump();
+            PlayJumpSound();
+        }
+    }
+
+    void KillPlayer()
+    {
+        Debug.Log("Time to kill the player");
+    }
+
+    //Method is invoked in LockMovement method
     void EnableMovement()
     {
         movementInput.Enable();
@@ -304,6 +295,7 @@ public class PlayerMover : MonoBehaviour
         Invoke("UnlockJump", fltJumpLockoutDuration);
     }
 
+    //Called in LockJump method
     void UnlockJump()
     {
         inJumpLockout = false;
@@ -311,6 +303,7 @@ public class PlayerMover : MonoBehaviour
 
     void PlayJumpSound()
     {
+        //Stop any previous sound played
         audioSource.Stop();
         audioSource.Play();
     }

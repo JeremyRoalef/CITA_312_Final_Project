@@ -5,17 +5,28 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+/*
+ * This class is responsible for pausing the game and showing the puase canvas. 
+ * This script is attached to the pause canvas game object
+ */
 public class PauseCanvas : MonoBehaviour
 {
-    [SerializeField] InputAction pauseAction;
-    [SerializeField] GameObject pauseCanvas;
+    //Serialized fields
+    [SerializeField]
+    [Tooltip("The keyboard button that will be responsible for pausing the game")]
+    InputAction pauseAction;
 
+    [SerializeField]
+    [Tooltip("Drag the panel game object attacehd to the canvas here")]
+    GameObject panelCanvas;
+
+    //Attributes
     public static bool gameIsPaused = false;
 
-    // Start is called before the first frame update
     void Start()
     {
-        pauseCanvas.SetActive(false);
+        //Disable the canvas
+        panelCanvas.SetActive(false);
     }
 
     private void OnEnable()
@@ -28,44 +39,48 @@ public class PauseCanvas : MonoBehaviour
         pauseAction.Disable();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (pauseAction.WasPressedThisFrame())
+        //If the pause button was not pressed, do not run.
+        if (!pauseAction.WasPressedThisFrame()) { return; }
+
+
+        if (gameIsPaused)
         {
-            if (gameIsPaused)
-            {
-                ResumeGame();
-                CursorLockState.LockCursor();
-            }
-            else
-            {
-                PauseGame();
-            }
+            ResumeGame();
+            //Prevent the player from moving their cursor
+            CursorLockState.LockCursor();
+        }
+        else
+        {
+            PauseGame();
         }
     }
 
     void ResumeGame()
     {
-        pauseCanvas.SetActive(false);
+        panelCanvas.SetActive(false);
         Time.timeScale = 1.0f;
         gameIsPaused = false;
     }
 
     void PauseGame()
     {
-        pauseCanvas.SetActive(true);
+        panelCanvas.SetActive(true);
 
         //The time scale is responsible for controlling how time passes in the game. Setting it to 0
         //means that time does not move
         Time.timeScale = 0;
         gameIsPaused = true;
+
+        //Allow the player to move their cursor
         CursorLockState.UnlockCursor();
     }
 
     public void OnButtonResumeClick()
     {
         ResumeGame();
+        //Prevent the player from moving their cursor
         CursorLockState.LockCursor();
     }
 

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is attached to the settings canvas. This script is responsible for showing the settings options and returning
+ * to the previously opened canvas.
+ */
 public class SettingsCanvas : MonoBehaviour
 {
     //Singleton Canvas
@@ -24,13 +28,11 @@ public class SettingsCanvas : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Method for back button
     public void OnButtonBackClick()
     {
         BackTrackCanvasStack.ReturnToPreviousCanvas(gameObject);
     }
 
-    //Method for audio button
     public void OnButtonAudioClick()
     {
         //Add current canvas to the stack, hide the current canvas, show the audio canvas
@@ -40,7 +42,6 @@ public class SettingsCanvas : MonoBehaviour
 
     }
 
-    //Method for controls button
     public void OnButtonControlsClick()
     {
         //Add current canvas to the stack, hide the current canvas, show the controls canvas

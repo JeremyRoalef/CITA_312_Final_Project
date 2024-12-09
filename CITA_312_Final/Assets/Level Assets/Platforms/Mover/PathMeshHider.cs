@@ -4,12 +4,14 @@ using UnityEngine;
 
 /*
  * This script is attached to the platform path object.
- * The purpose of this script is to hide and show the path
+ * 
+ * This script is responsible for hiding and showing the path in editor view.
  */
 
 [ExecuteAlways]
 public class PathMeshHider : MonoBehaviour
 {
+    //Serialized fields
     [SerializeField]
     bool showPath = true;
 
@@ -25,16 +27,15 @@ public class PathMeshHider : MonoBehaviour
 
     void Update()
     {
-        if (!Application.isPlaying)
+        if (Application.isPlaying) { return; }
+
+        if (showPath)
         {
-            if (showPath)
-            {
-                ShowMeshRenderers();
-            }
-            else
-            {
-                HideMeshRenderers();
-            }
+            ShowMeshRenderers();
+        }
+        else
+        {
+            HideMeshRenderers();
         }
     }
     void HideMeshRenderers()

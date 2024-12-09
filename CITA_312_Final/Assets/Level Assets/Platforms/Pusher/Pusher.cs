@@ -3,24 +3,35 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/*
+ * This script is attached to the pusher prefab.
+ * 
+ * This script will be responsible for pushing object based on the push behavior
+ */
 public class Pusher : MonoBehaviour
 {
+    //Enumerator for push behavior
     enum PushBehavior
     {
         Up,
         Away
     }
 
+    //Serialized fields
     [SerializeField]
     [Min(0)]
+    [Tooltip("The amound of force the pusher will apply to the other game object.")]
     float fltForceAmount = 100f;
 
     [SerializeField]
+    [Tooltip("How should this pusher push object?")]
     PushBehavior pushBehavior;
 
     [SerializeField]
+    [Tooltip("The time the player's movement will be disabled")]
     float fltPlayerLockoutDuration = 1f;
 
+    //Cashe references.
     AudioSource audioSource;
 
     private void Awake()
@@ -33,14 +44,17 @@ public class Pusher : MonoBehaviour
     }
     private void OnCollisionEnter(Collision other)
     {
+        //If colliding with player, push the player
         if (other.gameObject.CompareTag("Player"))
         {
             PushPlayer(other);
             PlayPushSound();
         }
     }
+
     private void PushPlayer(Collision other)
     {
+        //lock player's movement
         other.gameObject.GetComponent<PlayerMover>().LockMovement(fltPlayerLockoutDuration);
 
         switch (pushBehavior)

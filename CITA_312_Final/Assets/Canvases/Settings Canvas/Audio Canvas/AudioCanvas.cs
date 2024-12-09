@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is attached to the audio canvas. This script is responsible for controlling the in-game audio settings.
+ */
 public class AudioCanvas : MonoBehaviour
 {
     //Singleton canvas
@@ -24,7 +27,6 @@ public class AudioCanvas : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Method for the back button
     public void OnButtonBackClick()
     {
         BackTrackCanvasStack.ReturnToPreviousCanvas(gameObject);

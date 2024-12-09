@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is attached to the upper prefab.
+ * 
+ * This script will be responsible for upper behavior
+ */
 public class Upper : MonoBehaviour
 {
     //Serialized Fields
     [SerializeField]
     Vector3 targetPos;
-
-    //Cashe References
 
     //Attributes
     Vector3 startPos;
@@ -18,31 +21,13 @@ public class Upper : MonoBehaviour
         startPos = transform.position;
     }
 
-    //private void OnCollisionEnter(Collision other)
-    //{
-    //    StopAllCoroutines();
-
-    //    if (other.gameObject.CompareTag("Player"))
-    //    {
-    //        StartCoroutine(MoveToTargetPosition());
-    //    }
-    //}
-
-    //private void OnCollisionExit(Collision other)
-    //{
-    //    StopAllCoroutines();
-
-    //    if (other.gameObject.CompareTag("Player"))
-    //    {
-    //        StartCoroutine(MoveToStartPosition());
-    //    }
-    //}
-
+    //Called in upper collision handler script
     public void CallMoveToStartCoroutine()
     {
         StopAllCoroutines();
         StartCoroutine(MoveToStartPosition());
     }
+    //Called in upper collision handler script
     public void CallMoveToTargetCoroutine()
     {
         StopAllCoroutines();

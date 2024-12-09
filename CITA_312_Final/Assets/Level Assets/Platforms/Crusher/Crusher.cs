@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This script is attached to the crusher prefab.
+ * 
+ * This script is responsible for crusher behavior.
+ */
 public class Crusher : MonoBehaviour
 {
+    //Serialized fields
     [SerializeField]
     [Tooltip("How far should the object move in the given direction?")]
     float fltDistanceToMove = 1f;
@@ -13,6 +19,7 @@ public class Crusher : MonoBehaviour
     [Tooltip("The speed the object should move at")]
     float objVelocity = 10f;
 
+    //Attributes
     Vector3 velocityDir;
     Vector3 startPos;
     Vector3 endPos;
@@ -38,16 +45,15 @@ public class Crusher : MonoBehaviour
 
     void Update()
     {
-        if (!isMoving)
+        if (isMoving) { return; }
+
+        if (moveToEnd)
         {
-            if (moveToEnd)
-            {
-                StartCoroutine(MoveToEndPosition());
-            }
-            else
-            {
-                StartCoroutine(MoveToStartPosition());
-            }
+            StartCoroutine(MoveToEndPosition());
+        }
+        else
+        {
+            StartCoroutine(MoveToStartPosition());
         }
     }
 
@@ -91,6 +97,4 @@ public class Crusher : MonoBehaviour
         isMoving = false;
         moveToEnd = true;
     }
-
-
 }

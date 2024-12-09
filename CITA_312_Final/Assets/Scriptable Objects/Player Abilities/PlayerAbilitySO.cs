@@ -37,7 +37,7 @@ public class PlayerAbilitySO : ScriptableObject
 
     //Setting default sprite image when the scriptable object is made. Credit for idea: ChatGPT
     //The OnEnable is called after naming the scriptable object.
-    private void OnEnable()
+    void OnEnable()
     {
         if (abilityImage == null)
         {
